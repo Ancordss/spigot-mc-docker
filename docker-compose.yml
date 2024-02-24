@@ -1,0 +1,29 @@
+version: '3' # Docker Compose file version
+
+services:
+  mc-server: # Service name
+    image: mc-server # Docker image name
+    build: # Build configuration
+      context: . # Build context is the current directory
+      args: # Build arguments
+        FILENAME: mc-server.jar # Name of the server file
+        MC_VERSION: 1.20.4 # Minecraft server version
+        MIN_RAM: 1G # Minimum RAM allocated to the server
+        MAX_RAM: 8G # Maximum RAM allocated to the server
+    environment: # Environment variables
+      - ONLINE_MODE=false # Server online mode (false means it's a private server)
+      - PORT=25565 # Server port
+    container_name: mc-server # Name of the container
+    stdin_open: true # Keep STDIN open even if not attached
+    tty: true # Allocate a pseudo-TTY
+    ports: # Port mapping
+      - 25565:25565 # Map host port 25565 to container port 25565
+    volumes: # Volume mapping
+      - ./world:/minecraft/world # Map host directory ./world to container directory /minecraft/world
+      - ./plugins:/minecraft/plugins # Map host directory ./plugins to container directory /minecraft/plugins
+
+volumes: # Volume configuration
+  world: # Volume name
+    driver: local # Use local driver
+  plugins: # Volume name
+    driver: local # Use local driver
